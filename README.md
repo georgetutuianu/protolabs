@@ -43,7 +43,7 @@ venv\Scripts\activate
 
 ## Run the project
 ```bash
-python run_validator.py <path_to_input_file> <path_to_output_file>
+python run.py <path_to_input_file> <path_to_output_file>
 ```
 
 ## Testing
