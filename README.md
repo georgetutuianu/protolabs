@@ -50,3 +50,20 @@ python run_validator.py <path_to_input_file> <path_to_output_file>
 ```bash
 pytest tests/ --maxfail=1 --disable-warnings -v
 ```
+
+## Sample dataset results
+```text
+rows with holes information = 10211
+
+has_unreachable_hole_warning = 326
+has_unreachable_hole_error = 39
+
+rows with errors but no warnings = 0
+```
+
+## Next steps for preparing it for production
+
+- Add a linter for static code validation like `ruff` [https://github.com/astral-sh/ruff]
+- Improve it to be able to read and write to S3 (AWS)
+- Integrate it into a pipeline (Airflow / Prefect / anything else)
+- Create a Github pipeline for running the static and unit tests
