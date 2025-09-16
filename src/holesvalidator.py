@@ -46,6 +46,8 @@ class HolesValidator:
         for holes in df_chunk["holes_json"]:
             has_warn, has_err = False, False
 
+            # an assumption here will be that units are consistent across the dataset
+            # and all the values for length and radius are present and well formatted
             for hole in holes:
                 length, radius = hole.get("length", 0), hole.get("radius", 0)
                 if not has_warn and length > radius * self.warn_factor:
@@ -59,7 +61,7 @@ class HolesValidator:
             errors.append(has_err)
 
         df_chunk["has_unreachable_hole_warning"] = warnings
-        df_chunk["has_unreacheable_hole_error"] = errors
+        df_chunk["has_unreachable_hole_error"] = errors
 
         # Drop temporary JSON column
         df_chunk.drop("holes_json", axis=1, inplace=True)

@@ -11,7 +11,7 @@ It safely parses the JSON, computes unreachable hole warnings and errors, and ef
 - Safe **JSON parsing** with logging for invalid entries.
 - Computes two flags per row:
   - `has_unreachable_hole_warning`
-  - `has_unreacheable_hole_error`
+  - `has_unreachable_hole_error`
 - Supports **local files** and can be adapted to read from **S3**.
 - Fully **unit-tested** for robustness.
 
@@ -24,3 +24,29 @@ It safely parses the JSON, computes unreachable hole warnings and errors, and ef
 ```bash
 git clone https://github.com/georgetutuianu/protolabs.git
 cd protolabs
+```
+
+2. Create a virtual environment:
+```bash
+ python -m venv venv
+# Linux/Mac
+source venv/bin/activate
+# Windows
+venv\Scripts\activate
+
+```
+
+3. Install dependencies
+```bash
+ pip install -r requirements.txt
+```
+
+## Run the project
+```bash
+python run_validator.py <path_to_input_file> <path_to_output_file>
+```
+
+## Testing
+```bash
+pytest tests/ --maxfail=1 --disable-warnings -v
+```

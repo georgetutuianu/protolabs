@@ -35,7 +35,7 @@ def main():
     logger = logging.getLogger("HolesValidator")
 
     logger.info(f"Processing file: {args.input_file}")
-    validator = HolesValidator (parquet_path=args.input_file)
+    validator = HolesValidator(parquet_path=args.input_file)
 
     # Process the file
     df_processed = validator.process()

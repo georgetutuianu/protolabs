@@ -56,13 +56,13 @@ class TestHolesValidator:
         processed = validator._process_chunk(df_chunk)
 
         assert bool(processed.loc[0, "has_unreachable_hole_warning"]) is True
-        assert bool(processed.loc[0, "has_unreacheable_hole_error"]) is True
+        assert bool(processed.loc[0, "has_unreachable_hole_error"]) is True
 
         assert bool(processed.loc[1, "has_unreachable_hole_warning"]) is True
-        assert bool(processed.loc[1, "has_unreacheable_hole_error"]) is False
+        assert bool(processed.loc[1, "has_unreachable_hole_error"]) is False
 
         assert bool(processed.loc[2, "has_unreachable_hole_warning"]) is False
-        assert bool(processed.loc[2, "has_unreacheable_hole_error"]) is False
+        assert bool(processed.loc[2, "has_unreachable_hole_error"]) is False
 
     # --------------------------
     # Integration test for process()
@@ -83,6 +83,6 @@ class TestHolesValidator:
 
         assert df_processed.shape[0] == 2
         assert bool(df_processed.loc[0, "has_unreachable_hole_warning"]) is True
-        assert bool(df_processed.loc[0, "has_unreacheable_hole_error"]) is True
+        assert bool(df_processed.loc[0, "has_unreachable_hole_error"]) is True
         assert bool(df_processed.loc[1, "has_unreachable_hole_warning"]) is True
-        assert bool(df_processed.loc[1, "has_unreacheable_hole_error"]) is False
+        assert bool(df_processed.loc[1, "has_unreachable_hole_error"]) is False
