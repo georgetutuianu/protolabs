@@ -51,6 +51,8 @@ python run_validator.py <path_to_input_file> <path_to_output_file>
 pytest tests/ --maxfail=1 --disable-warnings -v
 ```
 
+--- 
+
 ## Sample dataset results
 ```text
 rows with holes information = 10211
