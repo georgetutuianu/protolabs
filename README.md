@@ -61,12 +61,30 @@ has_unreachable_hole_error = 39
 rows with errors but no warnings = 0
 ```
 
+## Result of the project
+The result assumes the parquet files will be written back to a filesystem (local / s3). And the new rows will be only
+uuid, has_unreachable_hole_warning, has_unreachable_hole_error. I chose this path only to take into account the idea of 
+having large datasets where it would be inefficient to have everything in memory in python. 
+
+With this approach, in order gain access to all the existing fields + the warn/error fields created it would require
+to have a join in the dataset (by uuid) at a later step, during the query phase.
+
+## Assumptions
+- For the missing holes this will return `False` for both warn & error
+- The validations are the basic ones. Assuming there's also a schema defined for the data and the validation of the 
+schema would happen in another step
+- As mentioned above, new columns can be appended only in a query step with this approach. It's fairly easy if we want
+read and write the full dataset, with all the columns
+- There will be a mechanism in place for knowing which files were already processed and which were not when running this
+transformation pipeline
+- If we store the bad records in another place, it assumes the existence of another mechanism that would resend the
+data through the pipeline
+
 ## Next steps for preparing it for production
 
 - Create a separate flow for bad rows
-- Add anomaly detection - make sure the schema is the expected one
 - Add a linter for static code validation like `ruff` [https://github.com/astral-sh/ruff]
 - Improve it to be able to read and write to S3 (AWS) or any other data storage needed
 - Integrate it into a pipeline (Airflow / Prefect / anything else)
-- Create a Github pipeline for running the static and unit tests
-- Add monitoring
+- Create a Github pipeline for running the static and unit tests and maybe even automated deployment
+- Add monitoring and alerting
