@@ -1,0 +1,43 @@
+erDiagram
+  PARTS {
+    string created
+    string updated
+    string queued
+    string geometric_heuristics "{unit, value}"
+    string holes
+    string job_run_time "{unit, value}"
+    string latheability "{axis: {x, y, z}, fraction, origin: {x, y, z}}"
+    string machining_directions "{box_volume: {unit, value}, direction_removable_volume: {unit, value: []}, is_machinable, selected_directions: [], unmachinable_volume: {unit, value}, unmachinable_volume_url}"
+    string multipart "{multibody, patches: {count, not_tiny_count}}"
+    string neighbors "{unit, value}"
+    string poles
+    string sheet_like_shape "{detected, positive_fraction_of_samples, tickness: float|{unit, value}}"
+    string unmachinable_edges "{count, edgle_list_url, length}"
+    float extrusion_height
+    string units
+    string status
+    string time
+    string uuid PK
+  }
+
+  HOLES {
+    string center "{x, y, z}"
+    string direction "{x, y, z}"
+    string end1 "{closed, reachable}"
+    string end2
+    int facet_count
+    float length
+    float radius
+  }
+
+  POLES {
+    string center "{x, y, z}"
+    string direction "{x, y, z}"
+    string end "{closed, reachable}"
+    int facet_count
+    float length
+    float radius
+  }
+
+  PARTS ||--o{ HOLES : contains
+  PARTS ||--o{ POLES : contains
