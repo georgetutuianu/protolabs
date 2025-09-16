@@ -1,0 +1,17 @@
+flowchart TD
+  START["Receive a parquet file path"]
+
+  READ["In chunks, read the parquet file (only read needed columns)"]
+  PROCESS["Transform the 'holes' field to make it easily usable"]
+  COMPUTE["Compute the errors and warnings we need"]
+  CLEAN["Remove columns used for getting to the final results"]
+  STORE["Store (in memory) the partial results that we have so far"]
+  WRITE["Once everything is processed, load the data where we would need"]
+
+  START --> READ
+  READ --> PROCESS
+  PROCESS --> COMPUTE
+  COMPUTE --> CLEAN
+  CLEAN --> STORE
+  STORE --> READ
+  STORE --> WRITE
