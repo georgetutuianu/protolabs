@@ -27,8 +27,10 @@ class HolesValidator:
         try:
             parsed = json.loads(holes_str)
             return parsed if isinstance(parsed, list) else [parsed]
-        except json.JSONDecodeError:
-            logging.warning(f"UUID {uuid}: Could not parse holes JSON - {holes_str}")
+        except json.JSONDecodeError as e:
+            logging.warning(f"UUID {uuid}: Could not parse holes JSON - {holes_str}. Error: {e}")
+
+            # todo: quarantine bad rows - maybe send them to a separate queue
             return []  # return valid list if anything fails
 
     def _process_chunk(self, df_chunk: pd.DataFrame) -> pd.DataFrame:
@@ -43,13 +45,22 @@ class HolesValidator:
 
         # Compute warning and error flags in a single pass
         warnings, errors = [], []
-        for holes in df_chunk["holes_json"]:
+        for holes, row_uuid in zip(df_chunk["holes_json"], df_chunk["uuid"]):
             has_warn, has_err = False, False
 
             # an assumption here will be that units are consistent across the dataset
-            # and all the values for length and radius are present and well formatted
             for hole in holes:
-                length, radius = hole.get("length", 0), hole.get("radius", 0)
+                length_raw, radius_raw = hole.get("length", 0), hole.get("radius", 0)
+
+                try:
+                    # validate these are numbers and not something else
+                    length, radius = abs(float(length_raw)), abs(float(radius_raw))
+                except (TypeError, ValueError):
+                    logging.warning(
+                        f"Invalid hole values for UUID {row_uuid}: length={length_raw}, radius={radius_raw}")
+                    # same here: should send the bad rows to a DLQ maybe
+                    continue
+
                 if not has_warn and length > radius * self.warn_factor:
                     has_warn = True
                 if not has_err and length > radius * self.error_factor:
@@ -77,6 +88,11 @@ class HolesValidator:
 
         # now read the table in chunks, one by one
         for row_group in range(parquet_file.num_row_groups):
+            """
+            an assumption here is that we will only work with the data that need now
+            and for a complete set of the data this would be merged with the original
+            data source at another step further along the way
+            """
             chunk_table = parquet_file.read_row_group(row_group, columns=self.columns)
             # transform to pandas df to use it easier
             df_chunk = chunk_table.to_pandas()

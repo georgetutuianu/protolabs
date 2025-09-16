@@ -63,7 +63,10 @@ rows with errors but no warnings = 0
 
 ## Next steps for preparing it for production
 
+- Create a separate flow for bad rows
+- Add anomaly detection - make sure the schema is the expected one
 - Add a linter for static code validation like `ruff` [https://github.com/astral-sh/ruff]
-- Improve it to be able to read and write to S3 (AWS)
+- Improve it to be able to read and write to S3 (AWS) or any other data storage needed
 - Integrate it into a pipeline (Airflow / Prefect / anything else)
 - Create a Github pipeline for running the static and unit tests
+- Add monitoring

@@ -1,0 +1,19 @@
+flowchart LR
+ subgraph Users["Users"]
+        U2["Analysts"]
+        U3["Operations"]
+  end
+    A["Raw_Parquet"] -- raw files --> O["Orchestrator"]
+    B["Schema_Catalog"] -- reads --> O
+    O -- trigger --> T["Transformation_Pipeline"]
+    CI["CI_CD"] -- deploy --> O & T
+    T -- reads --> A
+    T -- writes checkpoint --> STATE["Checkpoint_Metadata"]
+    T --> OBS["Observability"]
+    OBS --> ALERTS["Alerting"] & U3
+    DLQ["Dead_Letter_Queue"] -- reprocess --> O
+    T -- Fail --> DLQ
+    T -- writes to --> DL["Data_Lake"]
+    DL --> U2
+    STATE -- reads --> O
+    DL --> U3
